@@ -1,0 +1,296 @@
+/* Import the Karla font family */
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+*{
+    margin: 0 0;
+    padding: 0 0;
+}
+
+body {
+    position: absolute;
+    background: #1C1C1C;
+    display: flex;
+}
+
+.box{
+    margin: 3em 7em;
+    padding: 4em 3.44em;
+    width: 31.56em;
+    height: 23em;
+    background: #1F2937;
+}
+
+h1{
+    font-family: 'Karla';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 40px;
+    line-height: 40px;
+    /* or 100% */
+
+    letter-spacing: -0.025em;
+
+    color: #4ADF86
+}
+
+h1:first-of-type{
+    
+    /* white */
+    color: #FFFFFF;
+}
+
+h5{
+    padding: 1em 0;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 28px;
+    /* identical to box height, or 140% */
+
+    /* Medium grey */
+    color: #D5D4D8;
+}
+
+.btn{
+    margin: 1.5em 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 9px 17px 9px 15px;
+    gap: 12px;
+    background-color: #10B981;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+
+    /* text */
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height, or 150% */
+
+    /* white */
+    color: #FFFFFF;
+
+}
+
+.btn:hover, .btn:focus{
+    background-color: #1aaf7d;
+}
+
+.line{
+    width: 100%;
+    margin: 2em 0;
+    border: 1px solid #2F3E53;
+}
+
+.output-container{
+    margin: 3em 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+.output{
+    width: 211px;
+    height: 39px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 38px;
+    overflow: hidden;
+    /* identical to box height, or 200% */
+
+    text-align: center;    
+    background: #273549;
+    border-radius: 6px;
+    color: #55F991
+}
+
+.output:hover,.output:focus{
+    background: #c3efd3;
+    color: #273549 ;
+    cursor: copy;
+}
+
+
+/* Style tooltips */
+.output:hover::before , .output:focus::before{
+    content: attr(title);
+    position: absolute;
+    bottom: calc(100% + 5px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px;
+    background-color: #333;
+    color: #fff;
+    border-radius: 3px;
+    font-size: 14px;
+    white-space: nowrap;
+    transition-delay: 0;
+}
+  
+
+i.fas {
+    position: fixed;
+    top: 50px;
+    right: 3rem;
+    font-size: 4em;
+    color:#10B981 ;
+}
+  
+.fa-gear:hover,
+.fa-gear:focus {
+  animation: spin 4s linear infinite;
+  cursor: pointer;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.settings{
+    display: none;
+    margin: 3em;
+    padding: 4em 3.44em;
+    width: 20em;
+    height: 17em;
+    background: #1F2937;
+}
+
+.toggle-container {
+    margin-top: 4em;
+    display: flex;
+    align-items: center;
+    margin-bottom: 2em;
+}
+
+
+.toggle-container label {
+    margin-right: 1em;
+    color: #D5D4D8;
+    font-family: 'Inter';
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.length-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2em;
+}
+
+.length-container label {
+    margin-right: 1em;
+    color: #D5D4D8;
+    font-family: 'Inter';
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.length-container input {
+    width: 4em;
+    padding: 0.5em;
+    border: 1px solid #2F3E53;
+    background-color: #273549;
+    color: #FFFFFF;
+    font-family: 'Inter';
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 6px;
+    margin-right: 1em;
+}
+
+input[type=checkbox] {
+    transform: scale(1.5); /* increase the size by 50% */
+}
+
+  
+  .light-mode .box {
+    background-color: #ECFDF5;
+  }
+  
+  .light-mode h1:first-of-type {
+    color: #000000;
+  }
+  
+  .light-mode h5 {
+    color: #555555;
+  }
+  
+  
+  
+  .light-mode .output {
+    background-color: #1F2937;
+    color: #10B981;
+  }
+  
+  .light-mode .output:hover, .light-mode .output:focus {
+    color: #000000;
+    background-color: #6c6464;
+  }
+  
+  .light-mode .output:hover::before, .light-mode .output:focus::before {
+    background-color: #000000;
+    color: #ffffff;
+  }
+
+  
+  .light-mode .settings {
+    background-color: #ECFDF5;
+    color: #000000;
+  }
+  
+  .light-mode .toggle-container label, .light-mode .length-container label {
+    color: #555555;
+  }
+  
+  .light-mode input[type=checkbox] {
+    transform: scale(1.5);
+  }
+  
+  .light-mode .length-container input {
+    background-color: #1F2937;
+    color: #ECFDF5;
+    border-color: #dddddd;
+  }
+  
+
+  #toggle-btn{
+    margin: 1.5em 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 9px 17px 9px 15px;
+    gap: 12px;
+    background-color: #10B981;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+
+    /* text */
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height, or 150% */
+
+    /* white */
+    color: #FFFFFF;
+  }
