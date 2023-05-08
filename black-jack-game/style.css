@@ -1,0 +1,47 @@
+/* Complete the CSS styling according to the provided design */
+
+*{
+    padding: 0px 0px;
+    margin: 0px 0px;;
+}
+
+body {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-image: url("./img/photo-1541278107931-e006523892df.avif");
+    background-size: cover;
+    text-align: center;
+    margin-top: 20vh;
+    display: flex;
+    justify-content: center;
+}
+
+.container{
+    border-radius: 4em;
+    width: 20em;
+    padding: 3em;
+    background-image:radial-gradient(rgb(31, 105, 19),green, darkgreen, rgb(13, 45, 13));
+    height: 19em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+}
+
+h1 {
+    color: goldenrod;
+}
+
+#message-el, #sum-el, #cards-el {
+    color: goldenrod
+}
+
+.btn{
+    font-size: 1rem;
+    width: 10em;
+    height: 2.5em;
+    color: whitesmoke;
+    background-color: goldenrod;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
