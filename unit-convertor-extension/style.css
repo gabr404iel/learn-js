@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+*{
+    margin: 0 0;
+    padding: 0 0;
+}
+
+.top{
+    width: 550px;
+    background-color: #6943FF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.heading{
+    box-sizing: border-box;
+    padding: 33px 50px;
+    font-family: 'Inter', Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 28px;
+    line-height: 38px;
+    /* identical to box height, or 136% */
+    color: #FFFFFF;;
+    text-align: center;
+    letter-spacing: -0.03em;
+}
+
+.input{
+    background: #6943FF;
+    color:#FFFFFF ;
+    width: 120px;
+    height: 85px;
+    outline: none;
+    border: 2px solid #B295FF;
+    font-family: 'Inter', Arial, Helvetica, sans-serif;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 58px;
+    text-align: center;
+    border-radius: 2px;
+}
+
+#convert-btn{
+    margin-top: 25px;
+    margin-bottom: 34px;
+    border: 2px solid #ffffff;
+    border-radius: 1px;
+    width: 120px;
+    height: 42px;
+    cursor: pointer;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    color: #3D3D3D;
+}
+
+
+.bottom{
+    width: 550px;
+    background: #F4F4F4;
+}
+
+.boxes{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 36px 0;
+}
+
+
+.box{
+    background: #FFFFFF;
+    border-radius: 4.68077px 0px 0px 0px;
+    margin: 0 25px;
+    display: flex;
+    flex-direction: column;
+}
+
+.topic{
+    padding: 0 77px;
+    padding-top: 31px;
+    padding-bottom: 8px;
+    text-align: center;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    /* or 100% */
+    text-align: center;
+    color: #5A537B;
+;
+}
+
+.desc{
+    /* text-sm/leading-5/font-normal */
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    /* or 143% */
+    text-align: center;
+    color: #353535;
+    padding-bottom: 20px;
+}
