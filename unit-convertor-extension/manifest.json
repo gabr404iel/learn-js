@@ -4,9 +4,6 @@
     "name": "Metric/Imperial Unit Conversion",
     "action": {
         "default_popup": "index.html",
-        "default_icon": "icon.jpeg"
-    },
-    "icons": {
-        "128": "icon.jpeg"
-      }
+        "default_icon": "icon.ico"
+    }
 }
