@@ -1,0 +1,12 @@
+{
+    "manifest_version": 3,
+    "version": "1.0",
+    "name": "Metric/Imperial Unit Conversion",
+    "action": {
+        "default_popup": "index.html",
+        "default_icon": "icon.jpeg"
+    },
+    "icons": {
+        "128": "icon.jpeg"
+      }
+}
