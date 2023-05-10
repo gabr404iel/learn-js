@@ -47,6 +47,14 @@ html, body, main{
     gap: 10px;
 }
 
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
 .form-section{
     display: flex;
     flex-direction: column;
@@ -135,6 +143,10 @@ i:hover{
     cursor: pointer;
 }
 
+#back-btn{
+    padding-left: 30px;
+}
+
 .chat-area{
     padding-top: 60px;
     padding-bottom: 120px;
@@ -208,12 +220,19 @@ i:hover{
     padding-left: 30px;
 }
 
-#display-add-group{
-    line-height: 40px;
+.icons{
+    display: flex;
     padding-right: 30px;
+    gap: 20px;
 }
 
-.add-group-box{
+
+#display-join-group,#display-create-group,#logout-btn{
+    line-height: 40px;
+}
+
+
+.create-group-box{
     display: flex;
     padding: 20px 40px;
     background-color:#ada1a154 ;
@@ -224,21 +243,41 @@ i:hover{
     margin: 0px 30px 25px 30px;
 }
 
-.add-group-box > div{
+.create-group-box > div{
     box-sizing: border-box;
     display: flex;
     justify-content: center;
 }
 
-#group-id{
+#group-name-input{
+    width: 170px
+}
+
+
+.join-group-box{
+    padding: 20px 40px;
+    background-color:#ada1a154 ;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    border-radius: 10px;
+    margin: 0px 30px 25px 30px;
+}
+
+.join-group-box > div{
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+}
+
+#group-id-input{
     width: 120px
 }
 
-#add-group-btn{
+#create-group-btn,#join-group-btn{
     margin-left: 8px;
     font-size: 22px;
     border: none;
-    background-color: forestgreen;
     color: #f0f0f0;
     padding: 2px 4px;
     width: 100%;
@@ -248,7 +287,40 @@ i:hover{
     border-radius: 4px;
 }
 
+#create-group-btn{
+    background-color: forestgreen;
+}
+
+#join-group-btn{
+    background-color: orangered;
+}
+
+
+.js-is-flex{
+    display: flex;
+}
 
 .js-is-hidden{
     display: none;
 }
+
+.alert-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    padding: 10px;
+}
+  
+.alert-message {
+    display: inline-block;
+    padding: 16px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #333;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+  

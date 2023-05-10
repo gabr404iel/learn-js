@@ -6,21 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="index.css">
     <title>WePraise</title>
-    <script src="https://kit.fontawesome.com/6faef4fc76.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/bb3ae2c4d9.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <main>
         <div class="chat-app">
             <header class="groups-header">
                 <div class="default-box">
-                    <p class="group-heading">Chat Groups</p>
-                    <i class="fa-solid fa-plus" id="display-add-group"></i>
+                    <p class="group-heading">Groups</p>
+                    <div class="icons">
+                        <i class="fa-solid fa-plus" id="display-create-group"></i>
+                        <i class="fa-solid fa-magnifying-glass" id="display-join-group"></i>
+                        <i class="fa-solid fa-right-from-bracket" id="logout-btn"></i>
+                    </div>
+                    
                 </div>
-                <div class="add-group-box">
+                <div class="create-group-box js-is-hidden">
+                    <label for="group-name">Group Name:</label>
+                    <div>
+                        <input type="text" id="group-name-input">
+                        <button id="create-group-btn">CREATE</button>
+                    </div>
+                    
+                </div>
+                <div class="join-group-box js-is-hidden">
                     <label for="group-id">Group ID:</label>
                     <div>
-                        <input type="text" id="group-id">
-                        <button id="add-group-btn">ADD</button>
+                        <input type="text" id="group-id-input">
+                        <button id="join-group-btn">JOIN</button>
                     </div>
                     
                 </div>
