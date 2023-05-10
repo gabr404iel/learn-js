@@ -1,0 +1,254 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+
+*{
+    margin: 0px;
+    padding:0px;
+    user-select: none;
+}
+
+html, body, main{
+    margin: 0;
+    padding: 0;
+    font-family: 'Josefin Sans', sans-serif;
+    background-color: #1B1924;
+    color: #bcbcbc;
+    user-select: none;
+  }
+
+.login,.register{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #1B1924;
+    max-width: 340px;
+    margin: 20px auto;
+
+}
+
+.logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2em 1em;
+    padding: 20px;
+    margin-bottom: 0;
+}
+
+.logo img{
+    max-width: 80%;
+}
+
+.login-form-section,.register-form-section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+}
+
+label,input{
+    text-align: center;
+    border:none;
+    outline: none;
+}
+
+label{
+    font-size: 26px;
+}
+
+input{
+    line-height: 27px;
+    font-size: 22px;
+}
+
+input, .login-btn, .register-btn{
+    border-radius: 4px;
+}
+
+.register-btn,.login-btn{
+    margin: 5px 0;
+    font-size: 22px;
+    border: 1px solid #f0f0f0;
+    background-color: maroon;
+    color: #f0f0f0;
+    padding: 2px;
+    width: 100%;
+    box-sizing: border-box;
+    font-weight: bold;
+    letter-spacing: -0.7px;
+}
+.page-link{
+    text-decoration: none;
+    color: maroon;
+    background-color: #f0f0f0;
+    padding: 4px;
+    border-radius: 3px;
+}
+.link-section{
+    align-items: first baseline;
+    display: flex;
+    flex-grow: 1;
+    gap: 7px;
+}
+
+.chat-app {
+    display: flex;
+    flex-direction: column;
+    background-color: #1B1924;
+    width: 100%; /* set width to 100% */
+    margin: 0; /* remove margin */
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+
+
+header{
+    position: fixed;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    gap: 15px;
+    padding: 20px 10px;
+    background: #20283d;
+}
+
+.group-title{
+    line-height: 20px;
+    font-size: 20px;
+}
+
+i{
+    line-height: 20px;
+}
+
+i:hover{
+    cursor: pointer;
+}
+
+.chat-area{
+    padding-top: 60px;
+    padding-bottom: 120px;
+    margin: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+}
+
+.message{
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-around;
+}
+
+.chat-bubble{
+    max-width: 260px;
+    border-radius: 12px;
+    margin-right: 20px ;
+    padding: 10px;
+    background-color: #ada1a154;
+}
+
+.user-name{
+    font-size: 20px;
+}
+
+.user-color{
+    width: 50px;
+    height: 50px;
+    border-radius: 19px;
+    border: 2px solid black;
+    background-color: black;
+    box-sizing: border-box;
+}
+
+.input-area {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.input-area input {
+    padding-left: 20px;
+    text-align: left;
+    height: 40px;
+    user-select: all;
+    color: #1B1924;
+    font-size: 15px;
+    width: 100%;
+    border: none;
+    outline: none;
+    background-color: white;
+    border-radius: 0px;
+}
+
+.groups-header{
+    padding: 10px 10px;
+    flex-direction: column;
+}
+
+.default-box{
+    display: flex;
+    justify-content: space-between;
+}
+
+.group-heading{
+    font-size: 20px;
+    line-height: 40px;
+    padding-left: 30px;
+}
+
+#display-add-group{
+    line-height: 40px;
+    padding-right: 30px;
+}
+
+.add-group-box{
+    display: flex;
+    padding: 20px 40px;
+    background-color:#ada1a154 ;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    border-radius: 10px;
+    margin: 0px 30px 25px 30px;
+}
+
+.add-group-box > div{
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+}
+
+#group-id{
+    width: 120px
+}
+
+#add-group-btn{
+    margin-left: 8px;
+    font-size: 22px;
+    border: none;
+    background-color: forestgreen;
+    color: #f0f0f0;
+    padding: 2px 4px;
+    width: 100%;
+    box-sizing: border-box;
+    font-weight: bold;
+    letter-spacing: -0.7px;
+    border-radius: 4px;
+}
+
+
+.js-is-hidden{
+    display: none;
+}
