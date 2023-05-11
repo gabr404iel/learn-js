@@ -1,7 +1,7 @@
 //SERVERSIDE:
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"
-import { getDatabase, ref, push, onValue, set } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
+import { getDatabase, ref, push, onValue, set, get, orderByChild } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
 
 const appSettings = {
     databaseURL: "https://playground-3606c-default-rtdb.asia-southeast1.firebasedatabase.app/"
@@ -12,7 +12,7 @@ const appSettings = {
 const app = initializeApp(appSettings);
 const database = getDatabase(app);
 const usersRef = ref(database, "users");
-const groupListInDB = ref(database, "groupChat");
+const groupsRef = ref(database, "groups");
 
 
 const registerForm = document.getElementById("register-form");
@@ -24,6 +24,18 @@ const joinGroupBtn = document.getElementById("join-group-btn");
 const groupNameInput = document.getElementById("group-name-input");
 const groupIdInput = document.getElementById("group-id-input");
 const logoutBtn = document.getElementById("logout-btn")
+const usernameInput = document.getElementById('username');
+const usernameRegex = /^[^.$#\[\]]+$/;
+const passwordInput = document.getElementById('password');
+
+if(usernameInput){
+    usernameInput.addEventListener('input', () => {
+        if (!usernameRegex.test(usernameInput.value)) {
+          showAlert('Username can\'t contain ".", "#", "$", "[", or "]"');
+          usernameInput.value = '';
+        }
+    });
+}
 
 
 if (registerForm) {
@@ -43,7 +55,20 @@ if (registerForm) {
             return;
         }
 
-        createUser(username, password);
+        if (password.length < 8) {
+            showAlert('Password must be at least 8 characters long');
+            return
+        }
+
+         // Check if username already exists
+         const queryRef = ref(database, `users/${username}`);
+         get(queryRef).then((snapshot) => {
+             if (snapshot.exists()) {
+                 showAlert(`User ${username} already exists!`);
+             } else {
+                 createUser(username, password);
+             }
+         });
     });
 }
   
@@ -63,13 +88,18 @@ if (loginForm) {
 }
 
 const createUser = (username, password) => {
-    const newColorKey = Math.floor(Math.random() * 16777215).toString(16); // generate a random hex color code
-    const newUserRef = ref(database, `users/${newColorKey}`);
+    const color = Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0'); // generate a random hex color code
+    let key = username;
+    let hexcolor = "#" + color;
+    let groups = [];
+    const newUserRef = ref(database, `users/${key}`);
     set(newUserRef, {
         username,
-        password
+        password,
+        hexcolor,
+        groups
     });
-    console.log(`User ${username} has been created with color key #${newColorKey}!`);
+    console.log(`User ${username} has been created with color ${hexcolor}!`);
     changePage("./login.html");
 }
 
@@ -81,7 +111,9 @@ const loginUser = (username, password) => {
             if (user.username === username && user.password === password) {
                 currentUser = {
                     id: key,
-                    username: user.username
+                    username: user.username,
+                    hex: user.hexcolor,
+                    groups : user.groups
                 };
                 console.log(`User ${currentUser.username} has been logged in!`);
                 localStorage.setItem("currentUser", JSON.stringify(currentUser)); // store currentUser in local storage
@@ -107,9 +139,6 @@ function logoutUser() {
     changePage("./login.html");
 }
 
-
-
-
 if(logoutBtn){
     logoutBtn.addEventListener("click", (e) => {
         e.preventDefault();
@@ -130,17 +159,99 @@ function showAlert(message) {
 }
 
 
+const generateGroupId = (num) => {
+    const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let result = '';
+    for (let i = 0; i < num; i++) {
+        result += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return result;
+}
+
+const createGroup = (groupName) => {
+    const currentUserJSON = localStorage.getItem("currentUser");
+    if (currentUserJSON) {
+        currentUser = JSON.parse(currentUserJSON);
+    }
+    const newGroupId = generateGroupId(7);
+    const newGroupRef = push(groupsRef); // push() method generates a new unique key for the new group
+    const groupData = {
+        name: groupName,
+        id: newGroupId,
+        users: [currentUser]
+    }
+    set(newGroupRef, groupData);
+    createGroupEl.classList.remove("js-is-flex");
+    createGroupEl.classList.add("js-is-hidden");
+    console.log(`Group ${groupName} has been created with ID ${newGroupId}!`);
+    showAlert(`You have created "${groupName}"!`)
+
+    // Update user's groups
+    const userRef = ref(database, `users/${currentUser.id}`);
+    get(userRef).then((snapshot) => {
+        const userData = snapshot.val();
+        if (userData && userData.groups) { // Check if userData.groups exists
+            const updatedGroups = [...userData.groups, groupData];
+            set(userRef, { ...userData, groups: updatedGroups });
+        } else {
+            // If userData.groups doesn't exist, initialize it as an array containing groupData
+            set(userRef, { ...userData, groups: [groupData] });
+        }
+    });
+}
+
+
 if(createGroupBtn){
     createGroupBtn.addEventListener("click", ()=>{
         let groupName = groupNameInput.value;
-
+        createGroup(groupName);
     });
 }
+
+
+const joinGroup = (groupId, currentUser) => {
+    const groupsRef = ref(database, "groups");
+    get(groupsRef).then((snapshot) => {
+        const groups = snapshot.val();
+        const groupEntry = Object.entries(groups).find(([key, group]) => group.id === groupId);
+        if (groupEntry) {
+            const [groupKey, groupData] = groupEntry;
+            const groupRef = ref(database, `groups/${groupKey}`);
+            const updatedUsers = [...groupData.users, currentUser];
+            set(groupRef, { ...groupData, users: updatedUsers });
+            console.log(`User ${currentUser.username} has joined group ${groupData.name} (${groupKey})!`);
+            showAlert(`You have joined ${groupData.name}!`);
+            joinGroupEl.classList.remove("js-is-flex");
+            joinGroupEl.classList.add("js-is-hidden");
+
+            const userRef = ref(database, `users/${currentUser.id}`);
+            get(userRef).then((snapshot) => {
+                const userData = snapshot.val();
+                if (userData && userData.groups) { // Check if userData.groups exists
+                    const updatedGroups = [...userData.groups, groupData];
+                    set(userRef, { ...userData, groups: updatedGroups });
+                    console.log(`Updated user's groups: ${updatedGroups}`);
+                } else {
+                    // If userData.groups doesn't exist, initialize it as an empty array
+                    set(userRef, { ...userData, groups: [groupData] });
+                }
+            });
+        } else {
+            console.log(`Group with id: "${groupId}" does not exist!`);
+            showAlert(`Group with id: "${groupId}" does not exist!`);
+        }
+    });
+};
+
 
 if(joinGroupBtn){
     joinGroupBtn.addEventListener("click",()=>{
         let groupId = groupIdInput.value;
-
+        const currentUserJSON = localStorage.getItem("currentUser");
+        if (currentUserJSON) {
+            currentUser = JSON.parse(currentUserJSON);
+        }
+        joinGroup(groupId, currentUser); // Pass currentUser as a parameter
     });
 }
 
@@ -151,6 +262,10 @@ function changePage(url) {
     window.location.href = url;
 }
   
+function renderGroups(){
+
+}
+
 
 
 //UI && nav:
@@ -169,11 +284,25 @@ if(backButtonEl){
     });
 }
 
+
+const groupsHeader = document.getElementById('groups-header');
+const mainGroupSection = document.getElementById('group-section');
+const updateAppPadding = () => {
+    
+    const headerHeight = groupsHeader.offsetHeight; // get height of header
+    mainGroupSection.style.paddingTop = `${headerHeight}px`;
+};
+
+if(groupsHeader){
+    updateAppPadding();
+}
+
 if(createGroupEl){
     document.addEventListener("click", (event) =>{
         if(event.target.closest(".create-group-box") || event.target.closest("#display-create-group")) return
         createGroupEl.classList.add("js-is-hidden");
         createGroupEl.classList.remove("js-is-flex");
+        updateAppPadding();
     })
 }
 if(joinGroupEl){
@@ -181,6 +310,7 @@ if(joinGroupEl){
         if(event.target.closest(".join-group-box") || event.target.closest("#display-join-group")) return
         joinGroupEl.classList.add("js-is-hidden");
         createGroupEl.classList.remove("js-is-flex");
+        updateAppPadding();
     })
 }
 
@@ -188,13 +318,21 @@ if (displayCreateGroupBtn) {
     displayCreateGroupBtn.addEventListener("click", () => {
         createGroupEl.classList.remove("js-is-hidden");
         createGroupEl.classList.add("js-is-flex");
+        updateAppPadding();
     });
 }
 if (displayJoinGroupBtn) {
     displayJoinGroupBtn.addEventListener("click", () => {
         joinGroupEl.classList.remove("js-is-hidden");
         joinGroupEl.classList.add("js-is-flex");
+        updateAppPadding();
     });
 }
+
+
+
+
+
+
 
 
