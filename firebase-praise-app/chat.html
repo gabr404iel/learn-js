@@ -10,10 +10,10 @@
 </head>
 <body>
     <main>
-        <div class="chat-app">
+        <div class="chat-app" id="scroll-down">
             <header>
                 <i class="fas fa-arrow-left" id="back-btn"></i>
-                <p class="group-title" id="chat-name">Praising pig</p>
+                <p class="group-title" id="chat-name"></p>
             </header>
             <div class="chat-area">
                 <div class="message">
@@ -21,9 +21,7 @@
                         <div class="user-name">steve nash</div>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt quidem, culpa perspiciatis laborum nostrum necessitatibus officiis omnis similique sed ullam. Itaque, voluptatibus reprehenderit in cupiditate laboriosam doloribus voluptas velit sed?</p>
                     </div>
-                    <div class="user-color">
-                        <div class="profile-pic"></div>
-                    </div>
+                    <div class="user-color"></div>
                 </div>
                 <div class="message">
                     <div class="chat-bubble">
@@ -69,7 +67,8 @@
                 </div>
             </div>
             <div class="input-area">
-                <input type="text">
+                <input type="text" id="user-input-text">
+                <i class="fas fa-paper-plane" id="send-msg-btn"></i>
             </div>
         </div>
         <script src="index.js" type="module"></script>

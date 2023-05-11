@@ -423,12 +423,42 @@ function renderChat(groupChatId){
         const chatName = document.getElementById("chat-name");
         chatName.textContent = thisGroupInfo.name;
         
-
-
     });
 
 }
 
 
 renderChat(currentGroupChatId);
-JSON.parse(localStorage.getItem("currentGroup"));
+let currentGroupObj = JSON.parse(localStorage.getItem("currentGroup"));
+console.log(currentGroupObj);
+
+
+
+const userInputText = document.getElementById("user-input-text");
+const sendMessageBtn = document.getElementById("send-msg-btn");
+const chatArea = document.querySelector(".chat-area");
+
+if(sendMessageBtn){
+    sendMessageBtn.addEventListener("click", ()=>{
+        let messageSent = userInputText.value;
+        let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        let currentUserHex = currentUser.hex;
+        let currentUserName = currentUser.username;
+        console.log(currentUser);
+        console.log(currentUserName);
+        userInputText.value = "";
+        let messageEl = document.createElement("div");
+        messageEl.classList.add("message");
+        messageEl.innerHTML = `
+            <div class="chat-bubble">
+                <div class="user-name" style="color:${currentUserHex}">${currentUserName}</div>
+                <p>${messageSent}</p>
+            </div>
+            <div class="user-color" style="background-color:${currentUserHex}"></div>
+        
+        `
+        chatArea.appendChild(messageEl);
+        
+
+    })
+}
