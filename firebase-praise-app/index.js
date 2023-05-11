@@ -28,18 +28,14 @@ const usernameInput = document.getElementById('username');
 const usernameRegex = /^[^.$#\[\]]+$/;
 const passwordInput = document.getElementById('password');
 
-if (usernameInput) {
+if(usernameInput){
     usernameInput.addEventListener('input', () => {
-      const username = usernameInput.value.trim();
-      if (username === '') {
-        hideAlert();
-      } else if (!usernameRegex.test(username)) {
-        showAlert('Username can\'t contain ".", "#", "$", "[", or "]"');
-        usernameInput.value = '';
-      }
+        if (!usernameRegex.test(usernameInput.value)) {
+          showAlert('Username can\'t contain ".", "#", "$", "[", or "]"');
+          usernameInput.value = '';
+        }
     });
-  }
-  
+}
 
 
 if (registerForm) {
@@ -162,11 +158,6 @@ function showAlert(message) {
     }, 3000);
 }
 
-function hideAlert() {
-    const alertContainer = document.querySelector('.alert-container');
-    alertContainer.classList.add('js-is-hidden');
-  }
-
 
 const generateGroupId = (num) => {
     const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -192,7 +183,6 @@ const createGroup = (groupName) => {
     set(newGroupRef, groupData);
     createGroupEl.classList.remove("js-is-flex");
     createGroupEl.classList.add("js-is-hidden");
-    updateAppPadding();
     console.log(`Group ${groupName} has been created with ID ${newGroupId}!`);
     showAlert(`You have created "${groupName}"!`)
 
@@ -233,7 +223,6 @@ const joinGroup = (groupId, currentUser) => {
             showAlert(`You have joined ${groupData.name}!`);
             joinGroupEl.classList.remove("js-is-flex");
             joinGroupEl.classList.add("js-is-hidden");
-            updateAppPadding();
 
             const userRef = ref(database, `users/${currentUser.id}`);
             get(userRef).then((snapshot) => {
@@ -272,50 +261,10 @@ function changePage(url) {
     }
     window.location.href = url;
 }
-
-
-function renderGroups(groups) {
-
-    const groupsDisplayArea = document.querySelector(".groups-display-area");
   
-    groups.forEach((group) => {
-        const groupContainer = document.createElement("div");
-        groupContainer.classList.add("group-container");
-        const groupLogo = document.createElement("div");
-        groupLogo.classList.add("group-logo");
-        const groupData = document.createElement("div");
-        groupData.classList.add("group-data");
-        const groupName = document.createElement("p");
-        groupName.classList.add("group-name");
-        const groupRecent = document.createElement("div");
-        groupRecent.classList.add("group-recent");
-        const groupLastSender = document.createElement("p");
-        groupLastSender.classList.add("group-last-sender");
-        const groupLastMessage = document.createElement("p");
-        groupLastMessage.classList.add("group-last-msg");
+function renderGroups(){
 
-        groupName.textContent = group.name;
-        groupLastSender.textContent = group.lastSender;
-        groupLastMessage.textContent = group.lastMessage;
-
-        groupsDisplayArea.appendChild(groupContainer);
-        groupContainer.appendChild(groupLogo);
-        groupContainer.appendChild(groupData);
-        groupData.appendChild(groupName);
-        groupData.appendChild(groupRecent);
-        groupRecent.appendChild(groupLastSender);
-        groupRecent.appendChild(groupLastMessage);
-
-        // Add click event listener to groupContainer
-        groupContainer.addEventListener("click", () => {
-            // Store group ID in local storage
-            localStorage.setItem("currentGroupID", group.id);
-            // Navigate to chat.html
-            changePage("./chat.html");
-        });
-    });
 }
-  
 
 
 
@@ -331,8 +280,6 @@ const joinGroupEl = document.querySelector(".join-group-box");
 
 if(backButtonEl){
     backButtonEl.addEventListener("click", () => {
-        localStorage.removeItem("currentGroupId");
-        localStorage.removeItem("currentGroup");
         changePage("./groups.html");
     });
 }
@@ -385,50 +332,7 @@ if (displayJoinGroupBtn) {
 
 
 
-localStorage.setItem("currentGroupId", "M9yGGE0");
-
-let currentGroupChatId = localStorage.getItem("currentGroupId");
-
-console.log(currentGroupChatId);
-const groupsListInDB = ref(database, "groups");
-onValue(groupsListInDB, (snapshot) => {
-    if(snapshot.exists()){
-        let groupsArray = Object.entries(snapshot.val());
-
-        groupsArray.forEach(group => {
-            let thisGroupID = group[1].id;  //string group id 7digit
-            let thisGroupName = group[1].name;  // string groupname
-            let thisGroupMembers = group[1].users;  //object of users
-        });
-    }else{
-        console.log("No groups yet...");
-    }
-})
 
 
 
-function renderChat(groupChatId){
 
-    onValue(groupsListInDB, (snapshot) => {
-        let groupsArray = Object.entries(snapshot.val());
-        let thisGroupInfo = null;
-        groupsArray.forEach(group => {
-            if(group[1].id == groupChatId){
-                thisGroupInfo = group[1];
-                localStorage.setItem("currentGroup",JSON.stringify(thisGroupInfo));
-                return;
-            }
-        });
-        //get Chat Group Info from database
-        const chatName = document.getElementById("chat-name");
-        chatName.textContent = thisGroupInfo.name;
-        
-
-
-    });
-
-}
-
-
-renderChat(currentGroupChatId);
-JSON.parse(localStorage.getItem("currentGroup"));
