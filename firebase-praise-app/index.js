@@ -41,7 +41,6 @@ if (usernameInput) {
   }
   
 
-
 if (registerForm) {
     registerForm.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -196,16 +195,31 @@ const createGroup = (groupName) => {
     console.log(`Group ${groupName} has been created with ID ${newGroupId}!`);
     showAlert(`You have created "${groupName}"!`)
 
-    // Update user's groups
+   // Update user's groups
     const userRef = ref(database, `users/${currentUser.id}`);
     get(userRef).then((snapshot) => {
         const userData = snapshot.val();
-        if (userData && userData.groups) { // Check if userData.groups exists
-            const updatedGroups = [...userData.groups, groupData];
+        if (userData && userData.groups) {
+            const updatedGroups = [...userData.groups, { key: newGroupRef.key, ...groupData }];
             set(userRef, { ...userData, groups: updatedGroups });
         } else {
-            // If userData.groups doesn't exist, initialize it as an array containing groupData
-            set(userRef, { ...userData, groups: [groupData] });
+            set(userRef, { ...userData, groups: [{ key: newGroupRef.key, ...groupData }] });
+        }
+    });
+    //update the localStorageInstance
+    onValue(usersRef, (snapshot) => {
+        const users = snapshot.val();
+        for (const [key, user] of Object.entries(users)) {
+            if (user.username === currentUser.username) {
+                currentUser = {
+                    id: key,
+                    username: user.username,
+                    hex: user.hexcolor,
+                    groups : user.groups
+                };
+                console.log(`User ${currentUser.username} localStorage instance have been updated!`);
+                localStorage.setItem("currentUser", JSON.stringify(currentUser)); // store currentUser in local storage
+            }
         }
     });
 }
@@ -214,50 +228,118 @@ const createGroup = (groupName) => {
 if(createGroupBtn){
     createGroupBtn.addEventListener("click", ()=>{
         let groupName = groupNameInput.value;
+        groupNameInput.value = "";
         createGroup(groupName);
     });
 }
 
-
 const joinGroup = (groupId, currentUser) => {
     const groupsRef = ref(database, "groups");
     get(groupsRef).then((snapshot) => {
-        const groups = snapshot.val();
-        const groupEntry = Object.entries(groups).find(([key, group]) => group.id === groupId);
-        if (groupEntry) {
-            const [groupKey, groupData] = groupEntry;
-            const groupRef = ref(database, `groups/${groupKey}`);
-            const updatedUsers = [...groupData.users, currentUser];
-            set(groupRef, { ...groupData, users: updatedUsers });
-            console.log(`User ${currentUser.username} has joined group ${groupData.name} (${groupKey})!`);
-            showAlert(`You have joined ${groupData.name}!`);
-            joinGroupEl.classList.remove("js-is-flex");
-            joinGroupEl.classList.add("js-is-hidden");
-            updateAppPadding();
-
-            const userRef = ref(database, `users/${currentUser.id}`);
-            get(userRef).then((snapshot) => {
-                const userData = snapshot.val();
-                if (userData && userData.groups) { // Check if userData.groups exists
-                    const updatedGroups = [...userData.groups, groupData];
-                    set(userRef, { ...userData, groups: updatedGroups });
-                    console.log(`Updated user's groups: ${updatedGroups}`);
-                } else {
-                    // If userData.groups doesn't exist, initialize it as an empty array
-                    set(userRef, { ...userData, groups: [groupData] });
-                }
+      const groups = snapshot.val();
+      const groupEntry = Object.entries(groups).find(
+        ([key, group]) => group.id === groupId
+      );
+      if (groupEntry) {
+        const [groupKey, groupData] = groupEntry;
+        const groupRef = ref(database, `groups/${groupKey}`);
+        const updatedUsers = [...groupData.users, currentUser];
+        set(groupRef, { ...groupData, users: updatedUsers });
+        console.log(
+          `User ${currentUser.username} has joined group ${groupData.name} (${groupKey})!`
+        );
+        showAlert(`You have joined ${groupData.name}!`);
+        joinGroupEl.classList.remove("js-is-flex");
+        joinGroupEl.classList.add("js-is-hidden");
+        updateAppPadding();
+  
+        const userRef = ref(database, `users/${currentUser.id}`);
+        get(userRef).then((snapshot) => {
+          const userData = snapshot.val();
+          if (userData && userData.groups) {
+            const groupExists = userData.groups.some(
+              (group) => group.key === groupKey
+            );
+            if (!groupExists) {
+              const updatedGroups = [...userData.groups, { key: groupKey }];
+              set(userRef, { ...userData, groups: updatedGroups }).then(() => {
+                // Update the currentUser instance
+                currentUser = {
+                  id: currentUser.id,
+                  username: currentUser.username,
+                  hex: currentUser.hex,
+                  groups: updatedGroups,
+                };
+                console.log(
+                  `User ${currentUser.username} currentUser instance has been updated!`
+                );
+                // Store the updated currentUser in local storage
+                localStorage.setItem(
+                  "currentUser",
+                  JSON.stringify(currentUser)
+                );
+              });
+            } else {
+              console.log(`User is already a member of group ${groupKey}!`);
+            }
+          } else {
+            set(userRef, { ...userData, groups: [{ key: groupKey }] }).then(() => {
+              // Update the currentUser instance
+              currentUser = {
+                id: currentUser.id,
+                username: currentUser.username,
+                hex: currentUser.hex,
+                groups: [{ key: groupKey }],
+              };
+              console.log(
+                `User ${currentUser.username} currentUser instance has been updated!`
+              );
+              // Store the updated currentUser in local storage
+              localStorage.setItem(
+                "currentUser",
+                JSON.stringify(currentUser)
+              );
             });
-        } else {
-            console.log(`Group with id: "${groupId}" does not exist!`);
-            showAlert(`Group with id: "${groupId}" does not exist!`);
-        }
+          }
+        });
+      } else {
+        console.log(`Group with id: "${groupId}" does not exist!`);
+        showAlert(`Group with id: "${groupId}" does not exist!`);
+      }
     });
-};
-
+  
+    // Update the localStorageInstance
+    const userRef = ref(database, `users/${currentUser.id}`);
+    onValue(usersRef, (snapshot) => {
+      const users = snapshot.val();
+      for (const [key, user] of Object.entries(users)) {
+        if (
+          user.id === currentUser.id &&
+          user.username === currentUser.username
+        ) {
+          currentUser = {
+            id: key,
+            username: user.username,
+            hex: user.hexcolor,
+            groups: user.groups,
+          };
+          console.log(
+            `User ${currentUser.username} localStorage instance has been updated!`
+          );
+          localStorage.setItem(
+            "currentUser",
+            JSON.stringify(currentUser)
+          ); // store currentUser in local storage
+        }
+      }
+    });
+}   
+  
 
 if(joinGroupBtn){
     joinGroupBtn.addEventListener("click",()=>{
         let groupId = groupIdInput.value;
+        groupIdInput.value="";
         const currentUserJSON = localStorage.getItem("currentUser");
         if (currentUserJSON) {
             currentUser = JSON.parse(currentUserJSON);
@@ -273,9 +355,7 @@ function changePage(url) {
     window.location.href = url;
 }
 
-
 function renderGroups(groups) {
-
     const groupsDisplayArea = document.querySelector(".groups-display-area");
   
     groups.forEach((group) => {
@@ -295,8 +375,8 @@ function renderGroups(groups) {
         groupLastMessage.classList.add("group-last-msg");
 
         groupName.textContent = group.name;
-        groupLastSender.textContent = group.lastSender;
-        groupLastMessage.textContent = group.lastMessage;
+        groupLastSender.textContent = group.lastSender || ""; // Use empty string as default value
+        groupLastMessage.textContent = group.lastMessage || ""; // Use empty string as default value
 
         groupsDisplayArea.appendChild(groupContainer);
         groupContainer.appendChild(groupLogo);
@@ -305,7 +385,7 @@ function renderGroups(groups) {
         groupData.appendChild(groupRecent);
         groupRecent.appendChild(groupLastSender);
         groupRecent.appendChild(groupLastMessage);
-
+  
         // Add click event listener to groupContainer
         groupContainer.addEventListener("click", () => {
             // Store group ID in local storage
@@ -315,6 +395,9 @@ function renderGroups(groups) {
         });
     });
 }
+
+
+  
   
 
 
@@ -414,15 +497,14 @@ function renderChat(groupChatId){
         let thisGroupInfo = null;
         groupsArray.forEach(group => {
             if(group[1].id == groupChatId){
-                thisGroupInfo = group[1];
+                thisGroupInfo = group;
                 localStorage.setItem("currentGroup",JSON.stringify(thisGroupInfo));
                 return;
             }
         });
         //get Chat Group Info from database
         const chatName = document.getElementById("chat-name");
-        chatName.textContent = thisGroupInfo.name;
-        
+        chatName.textContent = thisGroupInfo[1].name;
     });
 
 }
@@ -430,35 +512,50 @@ function renderChat(groupChatId){
 
 renderChat(currentGroupChatId);
 let currentGroupObj = JSON.parse(localStorage.getItem("currentGroup"));
-console.log(currentGroupObj);
-
-
 
 const userInputText = document.getElementById("user-input-text");
 const sendMessageBtn = document.getElementById("send-msg-btn");
 const chatArea = document.querySelector(".chat-area");
 
-if(sendMessageBtn){
-    sendMessageBtn.addEventListener("click", ()=>{
-        let messageSent = userInputText.value;
-        let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        let currentUserHex = currentUser.hex;
-        let currentUserName = currentUser.username;
-        console.log(currentUser);
-        console.log(currentUserName);
-        userInputText.value = "";
-        let messageEl = document.createElement("div");
-        messageEl.classList.add("message");
-        messageEl.innerHTML = `
-            <div class="chat-bubble">
-                <div class="user-name" style="color:${currentUserHex}">${currentUserName}</div>
-                <p>${messageSent}</p>
-            </div>
-            <div class="user-color" style="background-color:${currentUserHex}"></div>
-        
-        `
-        chatArea.appendChild(messageEl);
-        
+function sendMessage() {
+    let messageSent = userInputText.value.trim();
+    if (messageSent === "") return; // Skip empty messages
+  
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    let currentUserHex = currentUser.hex;
+    let currentUserName = currentUser.username;
+  
+    userInputText.value = "";
+  
+    // Create a new message object
+    let messageData = {
+      timestamp: new Date().getTime(),
+      user: {
+        id: currentUser.id,
+        username: currentUserName,
+        hex: currentUserHex
+      },
+      message: messageSent
+    };
+  
+    // Get the current group's message history reference
+    const groupMessageHistoryRef = ref(database, `groups/${currentGroupObj[0]}/messageHistory`);
+    console.log(currentGroupObj[0]);
+    // Push the new message to the group's message history
+    push(groupMessageHistoryRef, messageData);
+}
 
-    })
+
+
+
+if (sendMessageBtn) {
+    sendMessageBtn.addEventListener("click", sendMessage);
+}
+  
+if (userInputText) {
+    userInputText.addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    });
 }

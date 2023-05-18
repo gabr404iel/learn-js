@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>Palette Generator</h1>
+        <script src="index.js" type="module"></script>
+        <section>
+            <form id="color-api-form">
+                <input type="color" for="seed-color" id="seed-color">
+                <select for="mode" id="scheme-mode">
+                    <option value="monochrome">Monochrome</option>
+                    <option value="monochrome-dark">Monochrome Dark</option>
+                    <option value="monochrome-light">Monochrome Light</option>
+                    <option value="analogic">Analogic</option>
+                    <option value="complement">Complement</option>
+                    <option value="analogic-complement">Analogic Complement</option>
+                    <option value="triad">Triad</option>
+                    <option value="quad">Quad</option>
+                </select>
+                <button type="submit" id="pick">Get</button>
+            </form>
+            <div class="color-container" id="info">
+            </div>
+        </section>
+    </body>
+</html>
