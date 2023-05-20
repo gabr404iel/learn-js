@@ -5,10 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>My Watchlist</title>
 </head>
 <body>
     <div class="sidebar flex-flow">
+        
         <h1 class="website-title">Movielists</h1>
         <div class="flex-group grey-border">
             <img src="./assets/search.png" alt="search">
@@ -34,10 +36,25 @@
             <p class="watchlist-name">John Doe's Watchlist</p>
             <i class="fa fa-trash" id="delete-watchlist"></i>
         </div>
+        <div class="watchlist-object grey-hover" id="watchlist">
+            <p class="watchlist-name">Mary Jane's Watchlist</p>
+            <i class="fa fa-trash" id="delete-watchlist"></i>
+        </div>
+        <div class="watchlist-object grey-hover" id="watchlist">
+            <p class="watchlist-name">Papa John's Watchlist</p>
+            <i class="fa fa-trash" id="delete-watchlist"></i>
+        </div>
+        <div class="watchlist-object grey-hover" id="watchlist">
+            <p class="watchlist-name">Spiderman's Watchlist</p>
+            <i class="fa fa-trash" id="delete-watchlist"></i>
+        </div>
     </div>
     <main>
         <div class="main-area flex-flow">
-            <h1 class="main-title website-title" id="website-title">John Doe's Watchlist</h1>
+            <div class="space-horizontal">
+                <h1 class="main-title website-title" id="website-title">John Doe's Watchlist</h1>
+                <span id="clear-watchlist">Clear Watchlist</span>
+            </div>
             <div class="movies" id="movies">
             </div>        
         </div>
