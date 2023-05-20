@@ -1,73 +1,162 @@
 const movieData = localStorage.getItem("movieData");
 console.log(movieData);
-
-const apiKey = "836f9959";
+//89303cfa
+//836f9959
+const apiKey = "89303cfa";
 const searchBarEl = document.getElementById("search-bar");
 const moviesEl = document.getElementById("movies");
 const clearSearchBarBtn = document.getElementById("clear-btn");
 const webTitle = document.getElementById("website-title");
 
-clearSearchBarBtn.addEventListener('click', ()=>{
-    searchBarEl.value = ""
-    webTitle.innerHTML = `Search for your favourite movies.`;
-    moviesEl.innerHTML = "";
-})
+if(clearSearchBarBtn){
+    clearSearchBarBtn.addEventListener('click', ()=>{
+        searchBarEl.value = ""
+        webTitle.innerHTML = `Search for your favourite movies.`;
+        moviesEl.innerHTML = "";
+    })
+}
 
 let debounceTimer;
-
-searchBarEl.addEventListener("keyup", () => {
-    clearTimeout(debounceTimer);
-
-    debounceTimer = setTimeout(() => {
-        moviesEl.innerHTML = "";
-        let searchTerm = searchBarEl.value;
-        if (searchBarEl.value.length > 0) {
-            webTitle.innerHTML = `Showing results for '${searchTerm}'`;
-        } else {
-            webTitle.innerHTML = `Search for your favourite movies.`;
-        }
-
-        let page = 1;
-        let Url = `https://www.omdbapi.com/?apikey=${apiKey}&s=${searchTerm}&type=movie`;
-        fetch(Url)
-            .then(response => response.json())
-            .then(data => {
-                const totalResults = parseInt(data.totalResults);
-                const itemsPerPage = 10; // Number of items per page
-                const totalPages = Math.ceil(totalResults / itemsPerPage);
-
-                for (let i = 1; i <= totalPages; i++) {
-                    let pageUrl = `https://www.omdbapi.com/?apikey=${apiKey}&s=${searchTerm}&type=movie&page=${i}`;
-                    fetch(pageUrl)
-                        .then(response => response.json())
-                        .then(data => {
-                            populatePage(data);
-                        });
-                }
-            })
-            .catch(error => {
-                console.log("Error:", error);
-            });
-    }, 500); // Set debounce delay in milliseconds
-});
-
-const populatePage = (movieData) => {
-    const moviesWithPoster = movieData.Search.filter(movie => movie.Poster !== "N/A");
-    const sortedMovies = moviesWithPoster.sort((a, b) => b.Year.localeCompare(a.Year));
-
-    sortedMovies.forEach(movie => {
-        moviesEl.innerHTML += `
-        <div class="movie-object">
-            <img src="./assets/ribbon.png" alt="bookmark" class="ribbon">
-            <img src="${movie.Poster}" alt="poster" class="poster">
-            <div>
-            <p class="movie-title">${movie.Title}</p>
-            <p class="movie-year">(${movie.Year})</p>
-            </div>
-        </div>
-    `;
+if(searchBarEl){
+    searchBarEl.addEventListener("keyup", () => {
+        clearTimeout(debounceTimer);
+    
+        debounceTimer = setTimeout(() => {
+            moviesEl.innerHTML = "";
+            let searchTerm = searchBarEl.value;
+            if (searchBarEl.value.length > 0) {
+                webTitle.innerHTML = `Showing results for '${searchTerm}'`;
+            } else {
+                webTitle.innerHTML = `Search for your favourite movies.`;
+            }
+    
+            let Url = `https://www.omdbapi.com/?apikey=${apiKey}&s=${searchTerm}&type=movie`;
+            fetch(Url)
+                .then(response => response.json())
+                .then(data => {
+                    const totalResults = parseInt(data.totalResults);
+                    const itemsPerPage = 10; // Number of items per page
+                    const totalPages = Math.ceil(totalResults / itemsPerPage);
+    
+                    for (let i = 1; i <= totalPages; i++) {
+                        let pageUrl = `https://www.omdbapi.com/?apikey=${apiKey}&s=${searchTerm}&type=movie&page=${i}`;
+                        fetch(pageUrl)
+                            .then(response => response.json())
+                            .then(data => {
+                                populatePage(data,true);
+                            });
+                    }
+                })
+                .catch(error => {
+                    console.log("Error:", error);
+                });
+        }, 500); // Set debounce delay in milliseconds
     });
 }
+
+
+export const populatePage = (movieData, isQuery) => {
+    let sortedMovies = movieData;
+    if(isQuery == true){
+        const moviesWithPoster = movieData.Search.filter(movie => movie.Poster !== "N/A");
+        sortedMovies = moviesWithPoster.sort((a, b) => b.Year.localeCompare(a.Year));
+    }
+    
+    sortedMovies.forEach(movie => {
+
+        const movieObject = document.createElement('div');
+        movieObject.classList.add('movie-object');
+        
+        const ribbon = document.createElement('img');
+        ribbon.src = './assets/ribbon.png';
+        ribbon.alt = 'bookmark';
+        ribbon.classList.add('ribbon');
+        ribbon.addEventListener('click' , () => {
+            showAddToWatchlistModal(movie);
+        })
+        
+        const poster = document.createElement('img');
+        poster.src = movie.Poster;
+        poster.alt = 'poster';
+        poster.classList.add('poster');
+        
+        const movieInfo = document.createElement('div');
+        const movieTitle = document.createElement('p');
+        movieTitle.classList.add('movie-title');
+        movieTitle.textContent = movie.Title;
+        
+        const movieYear = document.createElement('p');
+        movieYear.classList.add('movie-year');
+        movieYear.textContent = `(${movie.Year})`;
+
+        movieInfo.appendChild(movieTitle);
+        movieInfo.appendChild(movieYear);
+        
+        movieObject.appendChild(ribbon);
+        movieObject.appendChild(poster);
+        movieObject.appendChild(movieInfo);
+
+        moviesEl.appendChild(movieObject);
+
+    });
+}
+
+const watchlistEl =  document.getElementById("watchlist");
+watchlistEl.addEventListener('click', () => {
+    window.location.href = "./watchlist.html";
+});
+
+const homeEl = document.getElementById("home-element");
+homeEl.addEventListener('click' , () => {
+    window.location.href = "./index.html";
+});
+
+const showAddToWatchlistModal = (dataObj) => {
+    const blurEl = document.getElementsByClassName("blur");
+    Array.from(blurEl).forEach(element => {
+        element.classList.add("blurry");
+    });
+
+    const modal = document.getElementById("modal");
+    modal.style.display = "flex";
+    const movieTitle = document.getElementById("movie-title");
+    movieTitle.textContent = dataObj.Title;
+
+    const yesBtn = document.getElementById("yes");
+    const noBtn = document.getElementById("no");
+
+    yesBtn.addEventListener("click", () => {
+        const moviesOnWatchlistArr = localStorage.getItem("moviesOnWatchlist")
+        ? JSON.parse(localStorage.getItem("moviesOnWatchlist"))
+        : [];
+
+    // Remove any existing item with the same imdbID
+    const updatedArr = moviesOnWatchlistArr.filter(movie => movie.imdbID !== dataObj.imdbID);
+
+    // Add the new item to the array
+    updatedArr.push(dataObj);
+
+    localStorage.setItem("moviesOnWatchlist", JSON.stringify(updatedArr));
+    
+    removeModal();
+    })
+
+    noBtn.addEventListener("click", () => {
+        removeModal();
+    })
+}
+
+const removeModal = () => {
+    const blurEl = document.getElementsByClassName("blur");
+    const modal = document.getElementById("modal");
+    Array.from(blurEl).forEach(element => {
+        element.classList.remove("blurry");
+    });
+    modal.style.display = "none";
+}
+
+
+
 
 // {
 //     "Title":"Guardians of the Galaxy Vol. 2",

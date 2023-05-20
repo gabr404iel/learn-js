@@ -15,7 +15,7 @@
             <input type="text" placeholder="Search">
         </div>
         
-        <div class="flex-group grey-hover">
+        <div class="flex-group grey-hover" id="home-element">
             <img src="./assets/Home.png" alt="home">
             <p>Home</p>
         </div>
@@ -30,22 +30,14 @@
     </div>
 
     <div class="my-lists flex-flow">
-        <div class="watchlist-object grey-hover">
+        <div class="watchlist-object grey-hover" id="watchlist">
             <p class="watchlist-name">John Doe's Watchlist</p>
             <i class="fa fa-trash" id="delete-watchlist"></i>
         </div>
     </div>
     <main>
         <div class="main-area flex-flow">
-            <div class="search-bar">
-                <div class="flex-group grey-border">
-                    <img src="./assets/search.png" alt="search">
-                    <input type="text" id="search-bar" placeholder="Search movies by title">
-                </div>
-                <button class="btn" id="clear-btn">Clear</button>
-                
-            </div>
-            <h1 class="main-title website-title" id="website-title">Search for your favourite movies.</h1>
+            <h1 class="main-title website-title" id="website-title">John Doe's Watchlist</h1>
             <div class="movies" id="movies">
             </div>        
         </div>
@@ -55,6 +47,7 @@
 
 
     
-    <script src="index.js"></script>
+    <script src="index.js" type="module"></script>
+    <script src="watchlist.js" type="module"></script>
 </body>
 </html>

@@ -9,14 +9,14 @@
     <title>MovieLists</title>
 </head>
 <body>
-    <div class="sidebar flex-flow">
+    <div class="sidebar flex-flow blur">
         <h1 class="website-title">Movielists</h1>
         <div class="flex-group grey-border">
             <img src="./assets/search.png" alt="search">
             <input type="text" placeholder="Search">
         </div>
         
-        <div class="flex-group grey-hover">
+        <div class="flex-group grey-hover" id="home-element">
             <img src="./assets/Home.png" alt="home">
             <p>Home</p>
         </div>
@@ -30,13 +30,13 @@
         </div>
     </div>
 
-    <div class="my-lists flex-flow">
-        <div class="watchlist-object grey-hover">
+    <div class="my-lists flex-flow blur">
+        <div class="watchlist-object grey-hover" id="watchlist">
             <p class="watchlist-name">John Doe's Watchlist</p>
             <i class="fa fa-trash" id="delete-watchlist"></i>
         </div>
     </div>
-    <main>
+    <main class="blur">
         <div class="main-area flex-flow">
             <div class="search-bar">
                 <div class="flex-group grey-border">
@@ -54,8 +54,15 @@
 
     </main>
 
+    <div class="add-to-watchlist-modal" id="modal">
+        <h1>Add "<span id="movie-title"></span>" to your watchlist?</h1> 
+        <div class="space-horizontal">
+            <button class="btn" id="yes">Yes</button>
+            <button class="btn" id="no">No</button>
+        </div>
+    </div>
 
     
-    <script src="index.js"></script>
+    <script src="index.js" type="module"></script>
 </body>
 </html>

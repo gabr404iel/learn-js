@@ -245,8 +245,53 @@ main{
 }
 
 
+.add-to-watchlist-modal{
+    background-color: #1F1F1F;
+    padding: 3em;
+    color: #E1E1E1;
+    border-radius: 3em;
+    position: absolute;
+    width: 600px;
+    height: 300px;
+    position: absolute;
+    left: 50%;
+    top: 50%; 
+    transform: translate(-50%,-50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2em;
+}
 
+.add-to-watchlist-modal .btn{
+    border-radius: 3em;
+    padding: 1em;
+    width: 13em;
+    color: #141414;
+    font-size: 1rem;
+}
 
+.add-to-watchlist-modal .btn:last-of-type{
+    background-color: #464646;
+    color: #000000;
+}
 
+.add-to-watchlist-modal .btn:hover,
+.add-to-watchlist-modal .btn:focus{
+    cursor: pointer;
+    filter: brightness(1.1)
+}
 
+.blurry{
+    filter: blur(20px);
+}
+
+#modal{
+    display: none;
+}
+
+.space-horizontal{
+    display: flex;
+    justify-content: space-between;
+}
 
