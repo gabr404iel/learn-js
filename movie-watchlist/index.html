@@ -5,48 +5,55 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>MovieLists</title>
 </head>
 <body>
+    <div class="sidebar flex-flow">
+        <h1 class="website-title">Movielists</h1>
+        <div class="flex-group grey-border">
+            <img src="./assets/search.png" alt="search">
+            <input type="text" placeholder="Search">
+        </div>
+        
+        <div class="flex-group grey-hover">
+            <img src="./assets/Home.png" alt="home">
+            <p>Home</p>
+        </div>
+        <div class="flex-group grey-hover">
+            <img src="./assets/history.png" alt="history">
+            <p>History</p>
+        </div>
+        <button class="btn" id="create-watchlist-btn">+ Create watchlist</button>
+        <div class="grey-border-top">
+            <h3 class="grey-title">My Lists</h3>
+        </div>
+    </div>
+
+    <div class="my-lists flex-flow">
+        <div class="watchlist-object grey-hover">
+            <p class="watchlist-name">John Doe's Watchlist</p>
+            <i class="fa fa-trash" id="delete-watchlist"></i>
+        </div>
+    </div>
     <main>
-        <div class="sidebar flex-flow">
-            <h1 class="website-title">Movielists</h1>
-            <div class="flex-group grey-border">
-                <img src="./assets/search.png" alt="search">
-                <input type="text" placeholder="Search">
-            </div>
-            
-            <div class="flex-group grey-hover">
-                <img src="./assets/Home.png" alt="home">
-                <p>Home</p>
-            </div>
-            <div class="flex-group grey-hover">
-                <img src="./assets/history.png" alt="history">
-                <p>History</p>
-            </div>
-            <button class="btn" id="create-watchlist-btn">+ Create watchlist</button>
-            <div class="grey-border-top">
-                <h3 class="grey-title">My Lists</h3>
-            </div>
-        </div>
-    
-        <div class="my-lists flex-flow">
-
-        </div>
-
         <div class="main-area flex-flow">
-            <div class="flex-group grey-border">
-                <img src="./assets/search.png" alt="search">
-                <input type="text" id="search-bar" placeholder="Search movies by title">
+            <div class="search-bar">
+                <div class="flex-group grey-border">
+                    <img src="./assets/search.png" alt="search">
+                    <input type="text" id="search-bar" placeholder="Search movies by title">
+                </div>
+                <button class="btn" id="clear-btn">Clear</button>
+                
             </div>
-            <h1 class="main-title website-title">Popular movies right now</h1>
+            <h1 class="main-title website-title" id="website-title">Search for your favourite movies.</h1>
             <div class="movies" id="movies">
             </div>        
         </div>
 
 
     </main>
-   
+
 
     
     <script src="index.js"></script>

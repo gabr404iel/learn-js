@@ -10,6 +10,7 @@ html,
 body {
     height: 100%;
     font-family: 'Lato', sans-serif;
+    background-color: #000000;
 }
 
 
@@ -24,12 +25,8 @@ img, svg{
     max-width: 100%;
 }
 
-main{
-    display: grid;
-    grid-template: 1fr 1fr/1fr 4fr;
-    min-height: 100%;
-    background-color: #000000;
-}
+
+
 
 .flex-flow{
     display: flex;
@@ -39,17 +36,36 @@ main{
 
 .sidebar{
     padding: 1.25em 1.5em 0 1.5em;
-    grid-column: 1/2;
-    grid-row: 1/2;
+    height: 50vh;
+    top: 0;
+    left: 0;
     position: fixed;
     font-weight: 400;
+    min-width: 270px;
 }
 
 
 .my-lists{
-    grid-column: 1/2;
-    grid-row: 2/-1;
+    padding: 1.25em 1.5em 0 1.5em;
+    top: 50vh;
+    height: 50vh;
     position: fixed;
+    min-width: 270px;
+    color: #e1e1e16d;
+    gap: 0.4em;
+}
+
+.watchlist-object{
+    border-radius: 0.2rem; 
+    padding: 0.5em 0.75em;
+    transition: all 250ms;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.watchlist-name{
+    font-size: 0.875rem;
 }
 
 .website-title{
@@ -74,12 +90,18 @@ main{
 .grey-border{
     border: 1px solid rgba(217, 217, 217, 0.3);
     margin: 0.5em 0 1em 0;
+    flex-grow: 1;
 }
 
 .grey-border-top{
     border-top: 1px solid rgba(217, 217, 217, 0.3);
     height: 100%;
     display: flex;
+}
+
+.search-bar{
+    display: flex;
+    gap: 2em;
 }
 
 .flex-group input{
@@ -101,7 +123,7 @@ main{
     background-color: rgba(0, 0, 0, 0.8);;
 }
 
-#create-watchlist-btn{
+.btn{
     background-color: #F33F3F;
     padding: 0.5em 0.75em;
     margin: 0.5em 0;
@@ -112,15 +134,24 @@ main{
     transition: all 250ms;
 }
 
+#clear-btn{
+    margin: 0.5em 0 1em 0;
+    flex-grow: 0.1;
+}
+
 .flex-group:hover,
 .flex-group:focus,
-.btn:hover,
-.btn:focus
+#create-watchlist-btn:hover,
+#create-watchlist-btn:focus,
+#clear-btn:hover,
+#clear-btn:focus,
+.watchlist-object:hover,
+.watchlist-object:focus
 {
+    color: #E1E1E1 ;
     transform: translate(1.5px ,-1.5px);
     cursor: pointer;
     filter: brightness(1.1); /* Increase brightness on hover */
-
 }
 
 .grey-title{
@@ -128,6 +159,15 @@ main{
     color:#9A9A9A;
 }
 
+.fa-trash:hover{
+    color: #F33F3F;
+}
+
+main{
+    display: grid;
+    grid-template: 1fr 1fr/280px 4fr;
+    min-height: 100%;
+}
 
 .main-area{
     background-color: rgba(255, 255, 255, 0.1);
@@ -146,7 +186,7 @@ main{
 
 .movies{
     display: grid;
-    grid-template-rows: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-rows: repeat(auto-fit, minmax(300px, 450px));
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     column-gap: 2em;
     row-gap: 3em;
@@ -155,11 +195,7 @@ main{
 .movie-object{
     border-radius: 1em;
     padding: 1em 1em;
-    background-color: rgba(1, 1, 1, 0.1);
-    box-shadow: inset 0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 0.5);
-
-    
-    
+    background-color: rgba(1, 1, 1, 0.1);    
     position: relative;
     display: flex;
     gap: 0.4em;

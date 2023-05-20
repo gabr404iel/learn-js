@@ -1,30 +1,61 @@
-
 const movieData = localStorage.getItem("movieData");
 console.log(movieData);
 
-
 const apiKey = "836f9959";
 const searchBarEl = document.getElementById("search-bar");
+const moviesEl = document.getElementById("movies");
+const clearSearchBarBtn = document.getElementById("clear-btn");
+const webTitle = document.getElementById("website-title");
+
+clearSearchBarBtn.addEventListener('click', ()=>{
+    searchBarEl.value = ""
+    webTitle.innerHTML = `Search for your favourite movies.`;
+    moviesEl.innerHTML = "";
+})
+
+let debounceTimer;
+
 searchBarEl.addEventListener("keyup", () => {
-   
-    let searchTerm = searchBarEl.value;
-    let Url = `https://www.omdbapi.com/?apikey=${apiKey}&s=${searchTerm}&type=movie`;
-    fetch(Url)
-    .then(response => response.json())
-    .then(data => {
-        populatePage(data);
+    clearTimeout(debounceTimer);
 
-    })
-    .catch(error => {
-        console.log("Error:", error);
-    });
+    debounceTimer = setTimeout(() => {
+        moviesEl.innerHTML = "";
+        let searchTerm = searchBarEl.value;
+        if (searchBarEl.value.length > 0) {
+            webTitle.innerHTML = `Showing results for '${searchTerm}'`;
+        } else {
+            webTitle.innerHTML = `Search for your favourite movies.`;
+        }
 
-}); 
+        let page = 1;
+        let Url = `https://www.omdbapi.com/?apikey=${apiKey}&s=${searchTerm}&type=movie`;
+        fetch(Url)
+            .then(response => response.json())
+            .then(data => {
+                const totalResults = parseInt(data.totalResults);
+                const itemsPerPage = 10; // Number of items per page
+                const totalPages = Math.ceil(totalResults / itemsPerPage);
+
+                for (let i = 1; i <= totalPages; i++) {
+                    let pageUrl = `https://www.omdbapi.com/?apikey=${apiKey}&s=${searchTerm}&type=movie&page=${i}`;
+                    fetch(pageUrl)
+                        .then(response => response.json())
+                        .then(data => {
+                            populatePage(data);
+                        });
+                }
+            })
+            .catch(error => {
+                console.log("Error:", error);
+            });
+    }, 500); // Set debounce delay in milliseconds
+});
 
 const populatePage = (movieData) => {
-    const moviesEl = document.getElementById("movies");
-    moviesEl.innerHTML="";
-    movieData.Search.forEach(movie => {
+    const moviesWithPoster = movieData.Search.filter(movie => movie.Poster !== "N/A");
+    const sortedMovies = moviesWithPoster.sort((a, b) => b.Year.localeCompare(a.Year));
+
+    sortedMovies.forEach(movie => {
         moviesEl.innerHTML += `
         <div class="movie-object">
             <img src="./assets/ribbon.png" alt="bookmark" class="ribbon">
@@ -36,13 +67,7 @@ const populatePage = (movieData) => {
         </div>
     `;
     });
-   
 }
-
-
-
-
-
 
 // {
 //     "Title":"Guardians of the Galaxy Vol. 2",
